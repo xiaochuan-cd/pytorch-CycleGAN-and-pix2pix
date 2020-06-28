@@ -4,17 +4,18 @@ from data import create_dataset
 from models import create_model
 from PIL import Image
 from data.base_dataset import BaseDataset, get_params, get_transform
+import util
 
-def getitem(self, index):
+def getitem(opt):
 
     IM = Image.open('20.jpg').convert('RGB')
 
-    transform_params = get_params(self.opt, IM.size)
-    IM_transform = get_transform(self.opt, transform_params, grayscale=(self.input_nc == 1))
+    transform_params = get_params(opt, IM.size)
+    IM_transform = get_transform(opt, transform_params, grayscale=False)
 
     IM = IM_transform(IM)
 
-    return IM
+    return IM.reshape([1]+list(IM.shape))
 
 if __name__ == '__main__':
     opt = TestOptions().parse()  # get test options
@@ -24,8 +25,10 @@ if __name__ == '__main__':
     opt.serial_batches = True  # disable data shuffling; comment this line if results on randomly chosen images are needed.
     opt.no_flip = True    # no flip; comment this line if results on flipped images are needed.
     opt.display_id = -1   # no visdom display; the test code saves the results to a HTML file.
-    dataset = create_dataset(opt)  # create a dataset given opt.dataset_mode and other options
     model = create_model(opt)      # create a model given opt.model and other options
     model.setup(opt)               # regular setup: load and print networks; create schedulers
-    im = model.infer(getitem())
+    im = getitem(opt)
+    im = model.infer(im)
     print(im)
+    util.tensor2im(im)
+    util.save_image(im, '20f.png')
