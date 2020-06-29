@@ -4,7 +4,7 @@ from data import create_dataset
 from models import create_model
 from PIL import Image
 from data.base_dataset import BaseDataset, get_params, get_transform
-import util
+import util.util as util
 
 def getitem(opt):
 
@@ -30,5 +30,5 @@ if __name__ == '__main__':
     im = getitem(opt)
     im = model.infer(im)
     print(im)
-    util.tensor2im(im)
+    im = util.tensor2im(im)
     util.save_image(im, '20f.png')
