@@ -5,13 +5,16 @@ from models import create_model
 from PIL import Image
 from data.base_dataset import BaseDataset, get_params, get_transform
 import util.util as util
+import torchvision.transforms as transforms
 
 def getitem(opt):
 
     IM = Image.open('20.jpg').convert('RGB')
 
-    transform_params = get_params(opt, IM.size)
-    IM_transform = get_transform(opt, transform_params, grayscale=False)
+    # transform_params = get_params(opt, IM.size)
+    # IM_transform = get_transform(opt, transform_params, grayscale=False)
+
+    IM_transform = transforms.Compose([transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
     IM = IM_transform(IM)
 
@@ -19,7 +22,6 @@ def getitem(opt):
 
 if __name__ == '__main__':
     opt = TestOptions().parse()  # get test options
-    # hard-code some parameters for test
     opt.num_threads = 0   # test code only supports num_threads = 1
     opt.batch_size = 1    # test code only supports batch_size = 1
     opt.serial_batches = True  # disable data shuffling; comment this line if results on randomly chosen images are needed.
