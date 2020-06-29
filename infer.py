@@ -11,8 +11,8 @@ def getitem(opt):
 
     IM = Image.open('20.jpg').convert('RGB')
 
-    # transform_params = get_params(opt, IM.size)
-    # IM_transform = get_transform(opt, transform_params, grayscale=False)
+    transform_params = get_params(opt, IM.size)
+    IM_transform = get_transform(opt, transform_params, grayscale=False)
 
     IM_transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
